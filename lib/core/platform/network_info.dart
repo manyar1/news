@@ -8,8 +8,7 @@ class NetworkInfoImp implements NetworkInfo {
   final InternetConnectionChecker connectionChecker;
 
   NetworkInfoImp(this.connectionChecker);
-  
+
   @override
   Future<bool> get isConnected => connectionChecker.hasConnection;
-
 }

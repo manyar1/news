@@ -1,7 +1,6 @@
-
 import 'package:equatable/equatable.dart';
 
-class NewsEntity extends Equatable{
+class NewsEntity extends Equatable {
   final SourceEntity source;
   final String autor;
   final String title;
@@ -11,13 +10,22 @@ class NewsEntity extends Equatable{
   final DateTime publishedAt;
   final String content;
 
-  const NewsEntity({ required this.source, required this.autor, required this.title, required this.description, required this.url, required this.urlToImage, required this.publishedAt, required this.content});
-  
+  const NewsEntity({
+    required this.source,
+    required this.autor,
+    required this.title,
+    required this.description,
+    required this.url,
+    required this.urlToImage,
+    required this.publishedAt,
+    required this.content,
+  });
+
   @override
-  List<Object?> get props => [source, autor,title, description, url, urlToImage, publishedAt, content];
+  List<Object?> get props => [source, autor, title, description, url, urlToImage, publishedAt, content];
 }
 
-class SourceEntity{
+class SourceEntity {
   final String id;
   final String name;
   const SourceEntity({required this.id, required this.name});

@@ -24,25 +24,25 @@ class NewsModel extends NewsEntity {
   factory NewsModel.fromJson(Map<String, dynamic> json) {
     return NewsModel(
       source: json['source'] != null ? SourceModel.fromJson(json['source']) : null,
-      autor: json['autor'],
+      autor: json['autor'] ,
       title: json['title'],
       description: json['description'],
       url: json['url'],
       urlToImage: json['urlToImage'],
-      publishedAt: DateTime.parse(json['publishedAt'] as String),
+      publishedAt: DateTime.parse(json['publishedAt'] ),
       content: json['content'],
     );
   }
-  Map<String, dynamic> toJson(){
-    return{
-      'source':source,
+  Map<String, dynamic> toJson() {
+    return {
+      'source': source,
       'autor': autor,
       'title': title,
       'description': description,
       'url': url,
       'urlToImage': urlToImage,
       'publishedAt': publishedAt,
-      'content': content, 
+      'content': content,
     };
   }
 }

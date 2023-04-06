@@ -7,4 +7,3 @@ extension IterableExtension<T> on Iterable<T> {
 
   void removeFirstWhere(bool Function(T element) test) {}
 }
- 

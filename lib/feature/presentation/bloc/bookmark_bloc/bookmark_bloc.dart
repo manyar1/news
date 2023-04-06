@@ -17,7 +17,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   final RemoveBookmarkUsecases removeBookmark;
   final GetAllBookmarkUsecases getAllBookmark;
 
-  BookmarkBloc(this.addBookmark, this.removeBookmark, this.getAllBookmark) : super(BookmarkLoading()) {
+  BookmarkBloc(this.addBookmark, this.removeBookmark, this.getAllBookmark) : super(const BookmarkLoading()) {
     _setupEvents();
   }
 
@@ -29,6 +29,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
 
   Future<void> _addBookmark(AddBookmarkEvent event, Emitter emit) async {
     final prevState = state;
+    log(prevState.toString());
     if (prevState is! BookmarkLoaded) {
       log('illegal ${state.runtimeType} for ${event.runtimeType}');
       return;
@@ -52,7 +53,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   Future<void> _getAllBookmark(GetAllBookmarkEvent event, Emitter emit) async {
     final prevState = state;
     if (prevState is! BookmarkLoaded) {
-      emit(BookmarkLoading());
+      emit(const BookmarkLoading());
     }
     final response = await getAllBookmark(const GetAllBookmarkParamsUsecases());
     await response.fold((failure) => _onStateFailure(emit, failure),

@@ -1,3 +1,4 @@
+
 import 'package:dartz/dartz.dart';
 import 'package:news/core/error/exeptions.dart';
 import 'package:news/core/error/failure.dart';
@@ -28,6 +29,7 @@ class NewsRepositoryUmpl implements NewsRepository {
   Future<Either<Failure, List<NewsEntity>>> getTopHeadlines(int page, int pageSize) async {
     try {
       final remoteNews = await remoteDataSource.getTopHeadlines(page, pageSize);
+
       return Right(remoteNews);
     } on ServerException {
       return Left(ServerFailure());

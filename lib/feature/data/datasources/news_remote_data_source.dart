@@ -1,7 +1,6 @@
-import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:news/core/error/exeptions.dart';
 import 'package:news/feature/data/models/news_model.dart';
@@ -17,27 +16,35 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
   NewsRemoteDataSourceImpl({required this.client});
   @override
   Future<List<NewsModel>> getEverything(int page, int pageSize) async {
-    final response = await Dio().get(
-      'https://newsapi.org/v2/everything?q=apple&sortBy=popularity&apiKey=f87e49db0a194bd9b4e53b3350939100&page=$page&pageSize=$pageSize',
-    );
-    debugPrint(response.toString());
-    if (response.statusCode == 200) {
-      final news = json.decode(response.data);
-      return news['articles'].map(NewsModel.fromJson).toList();
-    } else {
+    try {
+      final response = await Dio().get(
+        'https://newsapi.org/v2/everything?q=apple&apiKey=f87e49db0a194bd9b4e53b3350939100&page=$page&pageSize=$pageSize',
+      );
+      if (response.statusCode == 200) {
+        return response.data['articles'].map<NewsModel>((article) => NewsModel.fromJson(article)).toList();
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {log('$e');
       throw ServerException();
     }
   }
 
   @override
   Future<List<NewsModel>> getTopHeadlines(int page, int pageSize) async {
-    final response = await Dio().get(
-        'GET https://newsapi.org/v2/top-headlines?q=apple&category=business&apiKey=f87e49db0a194bd9b4e53b3350939100&page=$page&pageSize=$pageSize');
-    debugPrint(response.toString());
-    if (response.statusCode == 200) {
-      final news = json.decode(response.data);
-      return news['articles'].map(NewsModel.fromJson).toList();
-    } else {
+    try {
+      final response = await Dio().get(
+          'https://newsapi.org/v2/top-headlines?q=apple&apiKey=f87e49db0a194bd9b4e53b3350939100&page=$page&pageSize=$pageSize');
+
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+        return response.data['articles'].map<NewsModel>((article) => NewsModel.fromJson(article)).toList();
+      } else {
+        throw ServerException();
+      }
+      
+    } catch (e) {
+      log('$e');
       throw ServerException();
     }
   }

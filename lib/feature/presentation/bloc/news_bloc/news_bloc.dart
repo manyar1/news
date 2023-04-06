@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +24,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   Future<void> _onGetEverything(GetEverything event, Emitter emit) async {
-    final response = await getEverything(const PageNewsParamsUsecases(page: 0, pageSize: 15));
+    final response = await getEverything(const PageNewsParamsUsecases(page: 1, pageSize: 15));
     await response.fold(
       (failure) => _onStateFailure(emit, failure),
       (news) => _onGetEverythingSuccessful(emit, news),
@@ -31,7 +33,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
   Future<void> _onGetEverythingSuccessful(Emitter emit, List<NewsEntity> everything) async {
     final prevState = state;
+    
     if (prevState is! NewsLoaded ){
+      log(everything.toString());
       emit(NewsLoaded(topHeadlinesNews: const [], everythingNews: everything));
     }
     else{
@@ -41,7 +45,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   Future<void> _onGetTopHeadlines(GetTopHeadlines event, Emitter emit) async {
-    final response = await getTopHeadlines(const PageTopHeadlinesParamsUsecases(page: 0, pageSize: 15));
+    final response = await getTopHeadlines(const PageTopHeadlinesParamsUsecases(page: 1, pageSize: 15));
+
     await response.fold(
       (failure) => _onStateFailure(emit, failure),
       (news) => _onGetTopHeadlinesSuccessful(emit, news),
@@ -51,9 +56,12 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   Future<void> _onGetTopHeadlinesSuccessful(Emitter emit, List<NewsEntity> headlines) async {
      final prevState = state;
      if (prevState is! NewsLoaded ){
+      
       emit(NewsLoaded(topHeadlinesNews: headlines, everythingNews: const []));
+      log('$state');
     }
     else{
+  
       emit(prevState.copywith(topHeadlinesNews: headlines));
     }
   }

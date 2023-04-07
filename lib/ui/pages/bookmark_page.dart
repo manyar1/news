@@ -4,12 +4,15 @@ import 'package:news/feature/domain/entities/news_entity.dart';
 import 'package:news/feature/presentation/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'package:news/ui/widgets/bookmark_widget/news_item_list_widget.dart';
 
-
 class BookmarkPage extends StatelessWidget {
   const BookmarkPage({super.key});
+  void _getAllBookmark(BuildContext context) {
+    context.read<BookmarkBloc>().add(const GetAllBookmarkEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getAllBookmark(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -23,37 +26,31 @@ class BookmarkPage extends StatelessWidget {
       ),
       body: BlocBuilder<BookmarkBloc, BookmarkState>(
         builder: (context, state) {
-          if(state is BookmarkLoaded){
+          if (state is BookmarkLoaded) {
             final news = state.news;
-              return news.isEmpty
-              ? const Center(
-                  child: Text('Пусто'),
-                )
-              : Column(
-                children: <Widget>[
-                  const Divider(),
-                  Expanded(
-                    child: ListView.separated(
-                        itemCount: _length(news),
-                        separatorBuilder: (_, __) => const Divider(),
-                        itemBuilder: (context, index) {
-                          return NewsItemList(news: news[index]);
-                        },
-                      ),
+            return Column(
+              children: <Widget>[
+                const Divider(),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: _length(news),
+                    separatorBuilder: (_, __) => const Divider(),
+                    itemBuilder: (context, index) {
+                      return NewsItemList(news: news[index]);
+                    },
                   ),
-                ],
-              );
-          }
-          else {
+                ),
+              ],
+            );
+          } else {
             return Container();
           }
-      
-        
         },
       ),
     );
   }
-  int _length(List<NewsEntity> news){
+
+  int _length(List<NewsEntity> news) {
     final setFoods = news.toSet();
     return setFoods.length;
   }

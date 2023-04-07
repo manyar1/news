@@ -24,6 +24,7 @@ class NewsLocalDataSourceImpl implements NewsLocalDataSource {
   @override
   Future<void> setNewsToCache(List<NewsModel> news) async {
     final jsonNewsList = news.map((news) => json.encode(news.toJson())).toList();
+
     await sharedPreferences.setStringList('CACHED_NEWS_LIST', jsonNewsList);
     log('News to write Cache: ${jsonNewsList.length}');
   }

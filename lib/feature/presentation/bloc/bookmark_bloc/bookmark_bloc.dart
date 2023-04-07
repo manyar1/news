@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -28,19 +29,33 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   }
 
   Future<void> _addBookmark(AddBookmarkEvent event, Emitter emit) async {
-    final prevState = state;
-    log(prevState.toString());
+    var prevState = state;
+
+    if (prevState is! BookmarkLoaded) {
+      final completer = Completer();
+      add(GetAllBookmarkEvent(completer: completer));
+      await completer.future;
+    }
+
+    prevState = state;
     if (prevState is! BookmarkLoaded) {
       log('illegal ${state.runtimeType} for ${event.runtimeType}');
       return;
     }
     final listBookmark = prevState.news.toList()..add(event.addBookmark);
+
     await addBookmark(AddBookmarkParamsUsecases(bookmarks: listBookmark));
     emit(BookmarkLoaded(news: listBookmark));
   }
 
   Future<void> _removeBookmark(RemoveBookmarkEvent event, Emitter emit) async {
-        final prevState = state;
+    var prevState = state;
+    if (prevState is! BookmarkLoaded) {
+      final completer = Completer();
+      add(GetAllBookmarkEvent(completer: completer));
+      await completer.future;
+    }
+    prevState = state;
     if (prevState is! BookmarkLoaded) {
       log('illegal ${state.runtimeType} for ${event.runtimeType}');
       return;
@@ -51,20 +66,24 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   }
 
   Future<void> _getAllBookmark(GetAllBookmarkEvent event, Emitter emit) async {
-    final prevState = state;
-    if (prevState is! BookmarkLoaded) {
-      emit(const BookmarkLoading());
+    try {
+      final prevState = state;
+      if (prevState is! BookmarkLoaded) {
+        emit(const BookmarkLoading());
+      }
+      final response = await getAllBookmark(const GetAllBookmarkParamsUsecases());
+      await response.fold(
+          (failure) => _onStateFailure(emit, failure), (news) => _onGetAllBookmarkSuccessful(emit, news));
+    } finally {
+      event.completer?.complete();
     }
-    final response = await getAllBookmark(const GetAllBookmarkParamsUsecases());
-    await response.fold((failure) => _onStateFailure(emit, failure),
-        (news) => _onGetAllBookmarkSuccessful(emit, news));
   }
-    Future<void> _onStateFailure(Emitter emit, Failure failure) async {
+
+  Future<void> _onStateFailure(Emitter emit, Failure failure) async {
     emit(BookmarkFailure(failure: failure));
   }
 
-  Future<void> _onGetAllBookmarkSuccessful(
-      Emitter emit, List<NewsEntity> news) async {
+  Future<void> _onGetAllBookmarkSuccessful(Emitter emit, List<NewsEntity> news) async {
     emit(BookmarkLoaded(news: news));
   }
 }

@@ -1,10 +1,9 @@
-
 import 'package:equatable/equatable.dart';
 
 import 'package:news/feature/domain/entities/news_entity.dart';
 import 'package:news/feature/domain/repositories/news_repository.dart';
 
-class RemoveBookmarkUsecases  {
+class RemoveBookmarkUsecases {
   final NewsRepository bookmarkRepository;
 
   RemoveBookmarkUsecases(this.bookmarkRepository);

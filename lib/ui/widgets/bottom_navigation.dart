@@ -31,14 +31,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
               ),
               label: 'Закладки',
             ),
-
-            // BottomNavigationBarItem(
-            //   icon: Icon(
-            //     Icons.account_box,
-            //     color: Colors.white,
-            //   ),
-            //   label: ('Профиль'),
-            // ),
           ],
         ),
         tabBuilder: (context, index) {
@@ -59,13 +51,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
               });
               break;
             case 2:
-
-            // returnValue = CupertinoTabView(builder: (context) {
-            //   return const CupertinoPageScaffold(
-            //     child: Profile(),
-            //   );
-            // });
-            // break;
           }
           return returnValue;
         });

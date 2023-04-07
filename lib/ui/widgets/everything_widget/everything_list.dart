@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,18 +16,19 @@ class _EverythingListState extends State<EverythingList> {
   @override
   Widget build(BuildContext context) {
     context.read<NewsBloc>().add(const GetEverything());
-    return BlocBuilder<NewsBloc, NewsState>(
-      builder: (context, state){
-        if (state is NewsLoaded){
-          final everythingNews = state.everythingNews;
-           return RefreshIndicator(
-            onRefresh: () async {
-            setState(() {});
+    return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
+      if (state is NewsLoaded) {
+        final everythingNews = state.everythingNews;
+        return RefreshIndicator(
+          onRefresh: () async {
+            final completer = Completer();
+            context.read<NewsBloc>().add(GetEverything(completer: completer));
+            await completer.future;
           },
-             child: SingleChildScrollView(
-                     physics: const BouncingScrollPhysics(),
-                     child: ListView.builder(
-               physics: const NeverScrollableScrollPhysics(),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: everythingNews.length,
                 itemBuilder: (context, index) {
@@ -38,12 +40,11 @@ class _EverythingListState extends State<EverythingList> {
                     return Container();
                   }
                 }),
-                   ),
-           );
-        }
-        return _loadingindicator();
+          ),
+        );
       }
-    );
+      return _loadingindicator();
+    });
   }
 }
 

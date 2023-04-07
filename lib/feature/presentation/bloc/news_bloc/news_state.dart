@@ -21,8 +21,10 @@ class NewsLoaded extends NewsState {
 
   const NewsLoaded({required this.topHeadlinesNews, required this.everythingNews});
 
-  NewsLoaded copywith({List<NewsEntity>? everythingNews, List<NewsEntity>? topHeadlinesNews}){
-    return NewsLoaded(topHeadlinesNews: topHeadlinesNews??this.topHeadlinesNews, everythingNews: everythingNews??this.everythingNews);
+  NewsLoaded copywith({List<NewsEntity>? everythingNews, List<NewsEntity>? topHeadlinesNews}) {
+    return NewsLoaded(
+        topHeadlinesNews: topHeadlinesNews ?? this.topHeadlinesNews,
+        everythingNews: everythingNews ?? this.everythingNews);
   }
 
   @override

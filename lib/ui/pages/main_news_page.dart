@@ -11,7 +11,6 @@ class MainNewsPage extends StatefulWidget {
 
 class _MainNewsPageState extends State<MainNewsPage> with TickerProviderStateMixin {
   late TabController _tabController;
-
   @override
   void initState() {
     super.initState();
@@ -22,15 +21,18 @@ class _MainNewsPageState extends State<MainNewsPage> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'News',
-            style: TextStyle(
+          title: Text(
+            _appBarText,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
             ),
           ),
           centerTitle: true,
           bottom: TabBar(
+            onTap: (index) {
+              setState(() {});
+            },
             controller: _tabController,
             tabs: const <Widget>[
               Tab(
@@ -50,4 +52,6 @@ class _MainNewsPageState extends State<MainNewsPage> with TickerProviderStateMix
       ),
     );
   }
+
+  String get _appBarText => _tabController.index == 0 ? 'Top Headlines' : 'Everything';
 }

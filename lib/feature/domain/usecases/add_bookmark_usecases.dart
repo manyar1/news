@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:news/feature/domain/entities/news_entity.dart';
 import 'package:news/feature/domain/repositories/news_repository.dart';
 
-class AddBookmarkUsecases  {
+class AddBookmarkUsecases {
   final NewsRepository bookmarkRepository;
 
   AddBookmarkUsecases(this.bookmarkRepository);

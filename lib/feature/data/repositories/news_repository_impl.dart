@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:news/core/error/exeptions.dart';
 import 'package:news/core/error/failure.dart';
@@ -35,28 +34,27 @@ class NewsRepositoryUmpl implements NewsRepository {
       return Left(ServerFailure());
     }
   }
-  
-  @override
-  Future<void> addBookmarks(List<NewsEntity> bookmarks) async{
 
-    bookmarks as List<NewsModel>;
-    await localDataSource.setNewsToCache(bookmarks);
-    
-  }
-  
   @override
-  Future<Either<Failure, List<NewsEntity>>> getAllBookmark() async{
-   try {
-    final cachedNews= await localDataSource.getCachedNews();
-    return Right(cachedNews);
-   }on ServerException {
+  Future<void> addBookmarks(List<NewsEntity> bookmarks) async {
+    bookmarks as List<NewsModel>;
+
+    await localDataSource.setNewsToCache(bookmarks);
+  }
+
+  @override
+  Future<Either<Failure, List<NewsEntity>>> getAllBookmark() async {
+    try {
+      final cachedNews = await localDataSource.getCachedNews();
+      return Right(cachedNews);
+    } on ServerException {
       return Left(ServerFailure());
     }
   }
-  
+
   @override
   Future<void> removeBookmark(List<NewsEntity> bookmarks) async {
-     bookmarks as List<NewsModel>;
+    bookmarks as List<NewsModel>;
     await localDataSource.setNewsToCache(bookmarks);
   }
 }

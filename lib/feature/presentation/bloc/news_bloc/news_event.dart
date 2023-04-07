@@ -7,7 +7,10 @@ abstract class NewsEvent extends Equatable {
 }
 
 class GetEverything extends NewsEvent {
-  const GetEverything();
+  final Completer? completer;
+  const GetEverything({this.completer});
+  @override
+  List<Object?> get props => [completer];
 }
 
 class GetTopHeadlines extends NewsEvent {
